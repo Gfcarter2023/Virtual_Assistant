@@ -75,6 +75,7 @@ def takeCommand():
 def wishMe():
     speak("Welcome Griffin")
 
+
 if __name__ == '__main__':
     clear = lambda: os.system('cls')
 
@@ -95,5 +96,10 @@ if __name__ == '__main__':
         elif "play" in query:
             findSong(query)
 
+        elif "next song" in query:
+            spotify.next_track()
+
+        elif "previous song" in query:
+            spotify.previous_track()
 
 whatToDo = ""

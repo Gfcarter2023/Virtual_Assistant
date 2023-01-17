@@ -19,6 +19,14 @@ auth_manager = SpotifyOAuth(
     username=username)
 spotify = spotipy.Spotify(auth_manager=auth_manager)
 
+devices = spotify.devices()
+deviceID = None
+for d in devices['devices']:
+    d['name'] = d['name'].replace('’', '\'')
+    if d['name'] == device_name:
+        deviceID = d['id']
+        break
+
 class InvalidSearchError(Exception):
     pass
 
@@ -91,14 +99,8 @@ def play_track(spotify=None, device_id=None, uri=None):
     spotify.start_playback(device_id=device_id, uris=[uri])
 
 def findSong(query):
-    devices = spotify.devices()
-    deviceID = None
-    for d in devices['devices']:
-        d['name'] = d['name'].replace('’', '\'')
-        if d['name'] == device_name:
-            deviceID = d['id']
-            break
     try:
+        spotify.shuffle(True, deviceID)
         name = query.replace("play ", "")
         if query.split(' ')[1] == 'album':
             name = name.replace("album ", "")
