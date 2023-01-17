@@ -89,3 +89,30 @@ def play_artist(spotify=None, device_id=None, uri=None):
 
 def play_track(spotify=None, device_id=None, uri=None):
     spotify.start_playback(device_id=device_id, uris=[uri])
+
+def findSong(query):
+    devices = spotify.devices()
+    deviceID = None
+    for d in devices['devices']:
+        d['name'] = d['name'].replace('’', '\'')
+        if d['name'] == device_name:
+            deviceID = d['id']
+            break
+    try:
+        name = query.replace("play ", "")
+        if query.split(' ')[1] == 'album':
+            name = name.replace("album ", "")
+            uri = get_playlist_uri(spotify=spotify, name=name)
+            play_album(spotify=spotify, device_id=deviceID, uri=uri)
+        elif query.split(' ')[1] == 'artist':
+            name = name.replace("artist ", "")
+            uri = get_artist_uri(spotify=spotify, name=name)
+            play_artist(spotify=spotify, device_id=deviceID, uri=uri)
+        elif query.split(' ')[1] == 'song':
+            name = name.replace("song ", "")
+            uri = get_track_uri(spotify=spotify, name=name)
+            play_track(spotify=spotify, device_id=deviceID, uri=uri)
+        else:
+            print('Specify either "album", "artist" or "play". Try Again')
+    except InvalidSearchError:
+        print('InvalidSearchError. Try Again')

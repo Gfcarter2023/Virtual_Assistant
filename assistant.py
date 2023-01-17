@@ -75,47 +75,6 @@ def takeCommand():
 def wishMe():
     speak("Welcome Griffin")
 
-def runSpotify():
-    username = 'gfcarter2023'
-    clientID = 'd915608996ca4262a94e20f152eb6277'
-    clientSecret = 'de1f2a9f0b384cb0815860e540d956ff'
-    device_name = 'GRIFFINS-PC'
-    redirect_uri = 'http://google.com/callback/'
-    scope = 'user-read-private user-read-playback-state user-modify-playback-state'
-
-    auth_manager = SpotifyOAuth(
-        client_id=clientID,
-        client_secret=clientSecret,
-        redirect_uri=redirect_uri,
-        scope=scope,
-        username=username)
-    spotify = sp.Spotify(auth_manager=auth_manager)
-
-    # Selecting device to play from
-    devices = spotify.devices()
-    deviceID = None
-    for d in devices['devices']:
-        d['name'] = d['name'].replace('’', '\'')
-        if d['name'] == device_name:
-            deviceID = d['id']
-            break
-        name = ' '.join(words[2:])
-        try:
-            if query[1] == 'album':
-                uri = get_playlist_uri(spotify=spotify, name=name)
-                play_album(spotify=spotify, device_id=deviceID, uri=uri)
-            elif query[1] == 'artist':
-                uri = get_artist_uri(spotify=spotify, name=name)
-                play_artist(spotify=spotify, device_id=deviceID, uri=uri)
-            elif query[1] == 'song':
-                uri = get_track_uri(spotify=spotify, name=name)
-                play_track(spotify=spotify, device_id=deviceID, uri=uri)
-            else:
-                print('Specify either "album", "artist" or "play". Try Again')
-        except InvalidSearchError:
-            print('InvalidSearchError. Try Again')
-
-
 if __name__ == '__main__':
     clear = lambda: os.system('cls')
 
@@ -134,7 +93,7 @@ if __name__ == '__main__':
             continue
 
         elif "play" in query:
-            runSpotify()
+            findSong(query)
 
 
 whatToDo = ""
